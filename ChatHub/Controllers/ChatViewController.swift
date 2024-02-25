@@ -6,99 +6,143 @@
 //
 
 import UIKit
+import FirebaseAuth
 
-class ChatViewController: UIViewController {
+final class ChatViewController: UIViewController {
     
-    private let chatMessages = ChatMessage.fakeMessages()
+    private var chatMessages = [ChatMessage]()
     
-    private let chatTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
+    private let chatWrapper = ChatWrapper()
     
-    private let messageField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Enter a message..."
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.leftView = .init(frame: .init(x: 0, y: 0, width: 5, height: 0))
-        textField.leftViewMode = .always
-        textField.borderStyle = .roundedRect
-        textField.autocorrectionType = .default
-        textField.returnKeyType = .send
-        textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        return textField
-    }()
+    private let chatView = ChatView()
     
-    private let messageSendButton: UIButton = {
-        let button = UIButton()
-        let config = UIImage.SymbolConfiguration(pointSize: 32, weight: .medium, scale: .default)
-        let image = UIImage(systemName: "arrow.up.circle.fill", withConfiguration: config)
-        button.setImage(image, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    let user: User
+    
+    init(user: User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpViews()
+        setupView()
+        fetchAllMessages()
     }
     
-    func setUpViews() {
+    private func setupView() {
+        view.addSubview(chatView)
         view.backgroundColor = .systemBackground
-        view.addSubview(chatTableView)
-        view.addSubview(messageField)
-        view.addSubview(messageSendButton)
-//        view.addLayoutGuide(opaqueBox)
-        
-        setupSendButton()
-        setupTableView()
+        chatView.translatesAutoresizingMaskIntoConstraints = false
+        chatView.delegate = self
+        chatView.tableViewDelegate = self
         addConstraints()
+        setLogoutButton()
+        
+        func addConstraints() {
+            NSLayoutConstraint.activate([
+                chatView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                chatView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+                chatView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+                chatView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            ])
+        }
+        
+        func setLogoutButton() {
+            navigationItem.rightBarButtonItem = .init(
+                barButtonSystemItem: .close,
+                target: self,
+                action: #selector(didTapCloseButton)
+            )
+        }
     }
     
-    private func setupSendButton() {
-        messageSendButton.addTarget(self, action: #selector(didTapSendButton), for: .touchUpInside)
-    }
-    
-    @objc func didTapSendButton() {
+    @objc
+    private func didTapCloseButton() {
+        do {
+            try Auth.auth().signOut()
+            navigationController?.setViewControllers([LoginViewController()], animated: true)
+        } catch {
+            debugPrint("Error \(error)")
+        }
         
     }
-    
-    private func setupTableView() {
-        chatTableView.dataSource = self
-        chatTableView.register(MyMessageTableViewCell.self, forCellReuseIdentifier: MyMessageTableViewCell.identifier)
-        chatTableView.register(OtherMessageTableViewCell.self, forCellReuseIdentifier: OtherMessageTableViewCell.identifier)
-    }
-    
-    private func addConstraints() {
-        NSLayoutConstraint.activate([
-            chatTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            chatTableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-            chatTableView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            
-            messageField.topAnchor.constraint(equalTo: chatTableView.bottomAnchor),
-            messageField.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10),
-            messageField.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            messageField.rightAnchor.constraint(equalTo: messageSendButton.leftAnchor, constant: -10),
-            
-            messageSendButton.centerYAnchor.constraint(equalTo: messageField.centerYAnchor),
-            messageSendButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            messageSendButton.widthAnchor.constraint(equalToConstant: 45),
-            messageSendButton.heightAnchor.constraint(equalToConstant: 45)
-        ])
+
+    private func fetchAllMessages() {
+        Task {
+            do {
+                let result = try await chatWrapper.getMessages()
+                chatMessages.append(contentsOf: result)
+                chatView.reloadTableView()
+            }
+            catch {
+                debugPrint("Error \(error)")
+            }
+        }
     }
 }
 
-extension ChatViewController: UITableViewDataSource, UITableViewDelegate {
+extension ChatViewController: ChatViewDelegate, ChatTableViewDelegate {
+    
+    func didTapSend(msg: String?) -> Bool {
+        
+        guard let msg else {
+            debugPrint("Textfield is empty !!")
+            return false
+        }
+        
+        let newMessageIndex = chatMessages.count
+        
+        let newMessage = ChatMessage(
+            id: UUID().uuidString,
+            userId: user.uid,
+            userName: user.displayName ?? "",
+            message: msg,
+            timeStamp: .init()
+        )
+        
+        chatMessages.append(newMessage)
+        chatView.insertRow(at: .init(row: newMessageIndex, section: 0))
+        
+        Task {
+            do {
+                try chatWrapper.sendMessage(message: newMessage)
+            } catch {
+                debugPrint("Error \(error)")
+            }
+        }
+        
+        return true
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         chatMessages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: OtherMessageTableViewCell.identifier, for: indexPath) as! OtherMessageTableViewCell
-        let message = chatMessages[indexPath.row]
-        cell.configure(message: message)
-        return cell
+        let chatMessage = chatMessages[indexPath.row]
+        
+        if chatMessage.userId == user.uid {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: MyMessageTableViewCell.identifier, for: indexPath) as? MyMessageTableViewCell {
+                cell.configure(message: chatMessage)
+                return cell
+            }
+        }
+        else {
+            if let cell = tableView.dequeueReusableCell(
+                    withIdentifier: OtherMessageTableViewCell.identifier,
+                    for: indexPath
+                ) as? OtherMessageTableViewCell {
+
+                cell.configure(message: chatMessage)
+                return cell
+            }
+        }
+        
+        return .init()
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -117,3 +161,4 @@ extension ChatViewController: UITableViewDataSource, UITableViewDelegate {
         UITableView.automaticDimension
     }
 }
+

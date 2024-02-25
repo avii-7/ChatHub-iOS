@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ChatMessage {
+struct ChatMessage: Encodable {
     var id: String
     var userId: String
     var userName: String

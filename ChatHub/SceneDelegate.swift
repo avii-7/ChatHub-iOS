@@ -18,18 +18,40 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let signedIn = Auth.auth().currentUser != nil
-        
+        let user = Auth.auth().currentUser
+
         let navigationController: UINavigationController
         
-        if signedIn {
-            navigationController = UINavigationController(rootViewController: ChatViewController())
+        let userDefaults = UserDefaults.standard
+        //let isFirstLaunch =
+        
+        let hasLaunchedBefore = userDefaults.bool(forKey: "hasLaunchedBefore")
+        
+        if let user {
+            // First launch of app
+            if hasLaunchedBefore {
+                navigationController = UINavigationController(rootViewController: ChatViewController(user: user))
+            }
+            else {
+                do {
+                    try Auth.auth().signOut()
+                    userDefaults.set(true, forKey: "hasLaunchedBefore")
+                } catch {
+                    debugPrint("Sign out error \(error)")
+                }
+                
+                navigationController = UINavigationController(rootViewController: LoginViewController())
+            }
         }
         else {
             navigationController = UINavigationController(rootViewController: LoginViewController())
+            
+            if hasLaunchedBefore == false {
+                userDefaults.set(true, forKey: "hasLaunchedBefore")
+            }
         }
         
-        self.window = UIWindow(windowScene: windowScene)
+        window = UIWindow(windowScene: windowScene)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
@@ -61,7 +83,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
 }
 
