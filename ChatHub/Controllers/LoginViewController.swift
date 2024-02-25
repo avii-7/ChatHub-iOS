@@ -35,10 +35,6 @@ final class LoginViewController: UIViewController {
             loginView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
-    
-    deinit {
-        debugPrint("VC de-intiallized !!")
-    }
 }
 
 extension LoginViewController: LoginViewDelegate {

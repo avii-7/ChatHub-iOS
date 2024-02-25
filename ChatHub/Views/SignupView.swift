@@ -1,18 +1,17 @@
 //
-//  LoginView.swift
+//  SignupView.swift
 //  ChatHub
 //
-//  Created by Arun on 24/02/24.
+//  Created by Arun on 25/02/24.
 //
 
 import UIKit
 
-protocol LoginViewDelegate: AnyObject {
-    func didTapLogin(email: String?, pass: String?) async throws
-    func didTapSignup()
+protocol SignupViewDelegate: AnyObject {
+    func didTapSignup(name: String?, email: String?, pass: String?) async throws
 }
 
-final class LoginView: UIView {
+final class SignupView: UIView {
     
     private let backgroundImageView: UIImageView = {
         let imageView = UIImageView()
@@ -29,6 +28,21 @@ final class LoginView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 28, weight: .semibold)
         return label
+    }()
+    
+    private let nameTextField: UITextField = {
+        let textField = UITextField()
+        textField.contentMode = .scaleToFill
+        textField.contentHorizontalAlignment = .left
+        textField.contentVerticalAlignment = .center
+        textField.borderStyle = .roundedRect
+        textField.placeholder = "Name"
+        textField.minimumFontSize = 18
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.font = .systemFont(ofSize: 14)
+        textField.keyboardType = .namePhonePad
+        textField.autocapitalizationType = .sentences
+        return textField
     }()
 
     private let emailTextField: UITextField = {
@@ -62,7 +76,7 @@ final class LoginView: UIView {
         return textField
     }()
 
-    private let logInButton: UIButton = {
+    private let signupButton: UIButton = {
         let button = UIButton()
         button.contentMode = .scaleToFill
         button.contentHorizontalAlignment = .center
@@ -76,28 +90,11 @@ final class LoginView: UIView {
             button.backgroundColor = .systemBlue
             button.layer.cornerRadius = 10
         }
-        button.setTitle("SIGNIN", for: .normal)
-        return button
-    }()
-    
-    private let createAccountButton: UIButton = {
-        let button = UIButton()
-        button.contentMode = .scaleToFill
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("SIGNUP", for: .normal)
-        button.backgroundColor = .systemIndigo
-        if #available(iOS 15.0, *) {
-            button.configuration = .filled()
-        } else {
-            button.contentEdgeInsets = .init(top: 10, left: 15, bottom: 10, right: 15)
-            button.layer.cornerRadius = 10
-        }
         return button
     }()
     
-    weak var delegate: LoginViewDelegate?
+    weak var delegate: SignupViewDelegate?
     
     init() {
         super.init(frame: .zero)
@@ -111,31 +108,25 @@ final class LoginView: UIView {
     private func setUpViews() {
         addSubview(backgroundImageView)
         addSubview(titleLabel)
+        addSubview(nameTextField)
         addSubview(emailTextField)
         addSubview(passwordTextField)
-        addSubview(logInButton)
-        addSubview(createAccountButton)
-        logInButton.addTarget(self, action: #selector(didTapLogin), for: .touchUpInside)
-        createAccountButton.addTarget(self, action: #selector(didTapSignup), for: .touchUpInside)
+        addSubview(signupButton)
+        signupButton.addTarget(self, action: #selector(didTapSignupButton), for: .touchUpInside)
         addConstraints()
     }
     
     @objc
-    private func didTapLogin() {
+    private func didTapSignupButton() {
         
         Task {
             do {
-                try await delegate?.didTapLogin(email: emailTextField.text, pass: passwordTextField.text)
+                try await delegate?.didTapSignup(name: nameTextField.text, email: emailTextField.text, pass: passwordTextField.text)
             }
             catch {
                 debugPrint("Error \(error)")
             }
         }
-    }
-    
-    @objc
-    private func didTapSignup() {
-        delegate?.didTapSignup()
     }
     
     private func addConstraints() {
@@ -144,7 +135,12 @@ final class LoginView: UIView {
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 45),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            emailTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 60),
+            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 60),
+            nameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
+            nameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
+            nameTextField.heightAnchor.constraint(equalToConstant: 44),
+            
+            emailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 40),
             emailTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
             emailTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
             emailTextField.heightAnchor.constraint(equalToConstant: 44),
@@ -155,11 +151,8 @@ final class LoginView: UIView {
             passwordTextField.heightAnchor.constraint(equalToConstant: 44),
             bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor),
 
-            logInButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 50),
-            logInButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            
-            createAccountButton.topAnchor.constraint(equalTo: logInButton.bottomAnchor, constant: 40),
-            createAccountButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            signupButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 50),
+            signupButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 
             backgroundImageView.topAnchor.constraint(equalTo: topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -167,3 +160,4 @@ final class LoginView: UIView {
         ])
     }
 }
+

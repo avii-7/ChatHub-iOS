@@ -13,14 +13,19 @@ struct ValidationResult {
 }
 
 protocol CredentialValidator {
-    func validate(userName: String?, email: String?, pass: String?) -> ValidationResult
+    func validate(name: String?, email: String?, pass: String?) -> ValidationResult
     func validate(email: String?, pass: String?) -> ValidationResult
 }
 
 struct CredentialValidatorHelper : CredentialValidator{
     
-    func validate(userName: String?, email: String?, pass: String?) -> ValidationResult {
-        .init(success: false)
+    func validate(name: String?, email: String?, pass: String?) -> ValidationResult {
+        
+        if name == nil || name!.isEmpty {
+            return .init(success: false, error: "name can't be empty")
+        }
+        
+        return validate(email: email, pass: pass)
     }
     
     
