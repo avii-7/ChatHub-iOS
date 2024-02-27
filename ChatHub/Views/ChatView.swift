@@ -90,7 +90,7 @@ final class ChatView: UIView {
             chatTableView.rightAnchor.constraint(equalTo:rightAnchor),
             
             messageInputField.heightAnchor.constraint(equalToConstant: 45),
-            messageInputField.topAnchor.constraint(equalTo: chatTableView.bottomAnchor),
+            messageInputField.topAnchor.constraint(equalTo: chatTableView.bottomAnchor, constant: 15),
             messageInputField.leftAnchor.constraint(equalTo:leftAnchor, constant: 10),
             messageInputField.bottomAnchor.constraint(equalTo:bottomAnchor, constant: -20),
             messageInputField.rightAnchor.constraint(equalTo: messageSendButton.leftAnchor, constant: -10),
@@ -114,13 +114,27 @@ final class ChatView: UIView {
         }
     }
     
-    @MainActor
-    func insertRow(at indexPath: IndexPath) {
-        chatTableView.insertRows(at: [indexPath], with: .automatic)
+    func insertRows(at indexPaths: [IndexPath]) {
+        chatTableView.insertRows(at: indexPaths, with: .automatic)
     }
     
-    @MainActor
     func reloadTableView() {
         chatTableView.reloadData()
+    }
+    
+    var isAtBottom: Bool {
+        let canScroll = chatTableView.contentSize.height > chatTableView.frame.height
+        if canScroll {
+            let bottomHitOffset = chatTableView.contentSize.height - chatTableView.frame.height
+            
+            if Int(bottomHitOffset) == Int(chatTableView.contentOffset.y) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func scrollToRow(to indexPath: IndexPath) {
+        chatTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
     }
 }

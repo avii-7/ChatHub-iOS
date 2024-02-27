@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 final class ChatViewController: UIViewController {
     
@@ -30,7 +31,16 @@ final class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        fetchAllMessages()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        registerListner()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unregiseterLister()
     }
     
     private func setupView() {
@@ -70,22 +80,56 @@ final class ChatViewController: UIViewController {
         }
         
     }
-
-    private func fetchAllMessages() {
-        Task {
+    
+    private func registerListner() {
+        chatWrapper.registerLister { @MainActor [weak self] docsSnapshot in
+            
             do {
-                let result = try await chatWrapper.getMessages()
-                chatMessages.append(contentsOf: result)
-                chatView.reloadTableView()
+                
+                var newChatMessages = [ChatMessage]()
+                
+                try docsSnapshot.forEach { docSnapshot in
+                    
+                    if docSnapshot.type == .added {
+                        let message = try docSnapshot.document.data(as: ChatMessage.self)
+                        newChatMessages.append(message)
+                    }
+                }
+                
+                guard let self else { return }
+                
+                if newChatMessages.isEmpty == false {
+                    let startIndex = self.chatMessages.count
+                    self.chatMessages.append(contentsOf: newChatMessages)
+                    let endIndex = chatMessages.count - 1
+                    
+                    let newRowRange = startIndex...endIndex
+                    var indexPaths = [IndexPath]()
+                    
+                    for i in newRowRange {
+                        indexPaths.append(.init(row: i, section: 0))
+                    }
+                    
+                    let isAtBottom = chatView.isAtBottom
+                    self.chatView.insertRows(at: indexPaths)
+                    
+                    if isAtBottom {
+                        chatView.scrollToRow(to: .init(row: endIndex, section: 0))
+                    }
+                }
             }
             catch {
                 debugPrint("Error \(error)")
             }
         }
     }
+    
+    private func unregiseterLister(){
+        chatWrapper.unregisterListener()
+    }
 }
 
-extension ChatViewController: ChatViewDelegate, ChatTableViewDelegate {
+extension ChatViewController: ChatViewDelegate {
     
     func didTapSend(msg: String?) -> Bool {
         
@@ -94,29 +138,24 @@ extension ChatViewController: ChatViewDelegate, ChatTableViewDelegate {
             return false
         }
         
-        let newMessageIndex = chatMessages.count
-        
         let newMessage = ChatMessage(
             id: UUID().uuidString,
             userId: user.uid,
             userName: user.displayName ?? "",
-            message: msg,
-            timeStamp: .init()
+            message: msg
         )
         
-        chatMessages.append(newMessage)
-        chatView.insertRow(at: .init(row: newMessageIndex, section: 0))
-        
-        Task {
-            do {
-                try chatWrapper.sendMessage(message: newMessage)
-            } catch {
-                debugPrint("Error \(error)")
-            }
+        do {
+            try chatWrapper.sendMessage(message: newMessage)
+        } catch {
+            debugPrint("Error \(error)")
         }
         
         return true
     }
+}
+
+extension ChatViewController: ChatTableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         chatMessages.count
@@ -133,10 +172,10 @@ extension ChatViewController: ChatViewDelegate, ChatTableViewDelegate {
         }
         else {
             if let cell = tableView.dequeueReusableCell(
-                    withIdentifier: OtherMessageTableViewCell.identifier,
-                    for: indexPath
-                ) as? OtherMessageTableViewCell {
-
+                withIdentifier: OtherMessageTableViewCell.identifier,
+                for: indexPath
+            ) as? OtherMessageTableViewCell {
+                
                 cell.configure(message: chatMessage)
                 return cell
             }
@@ -161,4 +200,3 @@ extension ChatViewController: ChatViewDelegate, ChatTableViewDelegate {
         UITableView.automaticDimension
     }
 }
-

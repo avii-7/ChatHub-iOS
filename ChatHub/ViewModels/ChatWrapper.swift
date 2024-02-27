@@ -21,29 +21,19 @@ struct ChatWrapper {
     }
     
     func getMessages() async throws -> [ChatMessage] {
-        
-        var chatMessages = [ChatMessage]()
-        
-        let docDict = try await firestoreWrapper.getAllDocuments()
-        for document in docDict {
-            chatMessages.append(.init(
-                id: document["id"] as? String ?? "",
-                userId: document["userId"] as? String ?? "",
-                userName: document["userName"] as? String ?? "",
-                message: document["message"] as? String ?? "",
-                timeStamp: .init(),
-                attachedImageNames: nil
-            ))
-        }
-        
-        if chatMessages.isEmpty == false {
-            
-        }
-        
+        let chatMessages: [ChatMessage] = try await firestoreWrapper.getAllDocuments()
         return chatMessages
     }
     
     func sendMessage(message: ChatMessage) throws {
         try firestoreWrapper.addDocument(doc: message)
+    }
+    
+    func registerLister(onChange: @escaping (([DocumentChange]) -> Void)) {
+        firestoreWrapper.registerLister(onChange: onChange)
+    }
+    
+    func unregisterListener() {
+        firestoreWrapper.unregisterListener()
     }
 }
