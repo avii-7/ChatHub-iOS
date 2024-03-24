@@ -8,10 +8,17 @@
 import UIKit
 
 protocol SignupViewDelegate: AnyObject {
-    func didTapSignup(name: String?, email: String?, pass: String?) async throws
+    func didTapSignup(name: String?, email: String?, pass: String?, profileImage: UIImage?) async throws
+    func didTapProfileImage()
 }
 
 final class SignupView: UIView {
+    
+    private let profilePictureImageSize = 100
+    
+    private var isProfilePictureAssigned = false
+    
+    private let placeholderImage = UIImage(systemName: "person.crop.circle.fill")
     
     private let backgroundImageView: UIImageView = {
         let imageView = UIImageView()
@@ -21,13 +28,21 @@ final class SignupView: UIView {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "ChatHub"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 28, weight: .semibold)
         return label
+    }()
+    
+    private let profileImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
+        imageView.clipsToBounds = true
+        return imageView
     }()
     
     private let nameTextField: UITextField = {
@@ -44,7 +59,7 @@ final class SignupView: UIView {
         textField.autocapitalizationType = .sentences
         return textField
     }()
-
+    
     private let emailTextField: UITextField = {
         let textField = UITextField()
         textField.contentMode = .scaleToFill
@@ -60,7 +75,7 @@ final class SignupView: UIView {
         textField.autocapitalizationType = .none
         return textField
     }()
-
+    
     private let passwordTextField: UITextField = {
         let textField = UITextField()
         textField.contentMode = .scaleToFill
@@ -75,7 +90,7 @@ final class SignupView: UIView {
         textField.isSecureTextEntry = true
         return textField
     }()
-
+    
     private let signupButton: UIButton = {
         let button = UIButton()
         button.contentMode = .scaleToFill
@@ -104,16 +119,19 @@ final class SignupView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     private func setUpViews() {
         addSubview(backgroundImageView)
         addSubview(titleLabel)
+        addSubview(profileImageView)
         addSubview(nameTextField)
         addSubview(emailTextField)
         addSubview(passwordTextField)
         addSubview(signupButton)
         signupButton.addTarget(self, action: #selector(didTapSignupButton), for: .touchUpInside)
         addConstraints()
+        setUpProfileImageView()
+        addGestureToProfileImageView()
     }
     
     @objc
@@ -121,7 +139,9 @@ final class SignupView: UIView {
         
         Task {
             do {
-                try await delegate?.didTapSignup(name: nameTextField.text, email: emailTextField.text, pass: passwordTextField.text)
+                let profileImage = isProfilePictureAssigned ? profileImageView.image : nil
+                
+                try await delegate?.didTapSignup(name: nameTextField.text, email: emailTextField.text, pass: passwordTextField.text, profileImage: profileImage)
             }
             catch {
                 debugPrint("Error \(error)")
@@ -132,10 +152,15 @@ final class SignupView: UIView {
     private func addConstraints() {
         NSLayoutConstraint.activate([
             
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 45),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 30),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 60),
+            profileImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            profileImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            profileImageView.widthAnchor.constraint(equalToConstant: CGFloat(profilePictureImageSize)),
+            profileImageView.heightAnchor.constraint(equalToConstant: CGFloat(profilePictureImageSize)),
+            
+            nameTextField.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 30),
             nameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
             nameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
             nameTextField.heightAnchor.constraint(equalToConstant: 44),
@@ -144,20 +169,46 @@ final class SignupView: UIView {
             emailTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
             emailTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
             emailTextField.heightAnchor.constraint(equalToConstant: 44),
-
+            
             passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 40),
             passwordTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
             passwordTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
             passwordTextField.heightAnchor.constraint(equalToConstant: 44),
             bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor),
-
+            
             signupButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 50),
             signupButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-
+            
             backgroundImageView.topAnchor.constraint(equalTo: topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
+    }
+    
+    private func addGestureToProfileImageView() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapProfileImageView))
+        profileImageView.addGestureRecognizer(tapGesture)
+    }
+    
+    private func setUpProfileImageView() {
+        profileImageView.layer.cornerRadius = CGFloat(profilePictureImageSize/2)
+        profileImageView.image = placeholderImage
+    }
+    
+    @objc
+    private func didTapProfileImageView() {
+        delegate?.didTapProfileImage()
+    }
+    
+    func setProfileImage(image: UIImage) {
+        isProfilePictureAssigned = true
+        profileImageView.image = image
+    }
+    
+    func removeProfileImage() {
+        isProfilePictureAssigned = false
+        profileImageView.image = nil
+        profileImageView.image = placeholderImage
     }
 }
 

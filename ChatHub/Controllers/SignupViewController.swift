@@ -7,6 +7,8 @@
 
 import UIKit
 import FirebaseAuth
+import PhotosUI
+import FirebaseStorage
 
 final class SignupViewController: UIViewController {
     
@@ -39,7 +41,25 @@ final class SignupViewController: UIViewController {
 
 extension SignupViewController: SignupViewDelegate {
     
-    func didTapSignup(name: String?, email: String?, pass: String?) async throws {
+    func didTapProfileImage() {
+        if #available(iOS 14.0, *) {
+            var configuration = PHPickerConfiguration()
+            configuration.selectionLimit = 1
+            configuration.filter = .images
+            
+            let pickerViewController = PHPickerViewController(configuration: configuration)
+            pickerViewController.delegate = self
+            present(pickerViewController, animated: true)
+            
+        } else {
+            let imagePickerController = UIImagePickerController()
+            imagePickerController.sourceType = .photoLibrary
+        }
+        
+    }
+    
+    func didTapSignup(name: String?, email: String?, pass: String?, profileImage: UIImage?) async throws {
+        
         let validationResult = credentialValidator.validate(name: name, email: email, pass: pass)
         
         if validationResult.success == false {
@@ -58,6 +78,16 @@ extension SignupViewController: SignupViewDelegate {
         let user = result.user
         let profileChangeRequest = user.createProfileChangeRequest()
         profileChangeRequest.displayName = name
+        
+        let storageWrapper = FirebaseStorageWrapper(uid: user.uid)
+        
+        if
+            let profileImage,
+            let profileImageData = profileImage.pngData() {
+            let url = try await storageWrapper.uploadProfileImage(uid: user.uid, profileImageData: profileImageData)
+            profileChangeRequest.photoURL = url
+        }
+        
         try await profileChangeRequest.commitChanges()
         
         navigationController?.setViewControllers([ChatViewController(user: user)], animated: true)
@@ -68,5 +98,30 @@ extension SignupViewController: SignupViewDelegate {
         let action = UIAlertAction(title: "OK", style: .default)
         alertController.addAction(action)
         present(alertController, animated: true)
+    }
+}
+
+extension SignupViewController: PHPickerViewControllerDelegate {
+    
+    @available(iOS 14.0, *)
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        
+        if let itemprovider = results.first?.itemProvider{
+            
+            if itemprovider.canLoadObject(ofClass: UIImage.self) {
+                itemprovider.loadObject(ofClass: UIImage.self) { [weak self] image , error  in
+                    if let error {
+                        print(error)
+                    }
+                    if let selectedImage = image as? UIImage {
+                        DispatchQueue.main.async {
+                            //self.imageView.image = selectedImage
+                            self?.signupView.setProfileImage(image: selectedImage)
+                        }
+                    }
+                }
+            }
+        }
     }
 }

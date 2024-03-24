@@ -7,79 +7,47 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "37D0C49B-0F6C-46FD-931E-5EAC82FA8688"
+            uuid = "ADA07036-E1A8-4CA5-9B5D-D54427DAA467"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ChatHub/SceneDelegate.swift"
+            filePath = "ChatHub/Views/CellViews/MyMessageTableViewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "scene(_:willConnectTo:options:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6DCB673D-FDE8-41EC-811B-192546764929"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChatHub/SceneDelegate.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "scene(_:willConnectTo:options:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B8BFE884-6F76-4920-85AF-452AC6EDBDA7"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChatHub/SceneDelegate.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
-            landmarkName = "scene(_:willConnectTo:options:)"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
+            landmarkName = "configure(model:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "B8BFE884-6F76-4920-85AF-452AC6EDBDA7 - 3283d0ff1a32e91f"
+                  uuid = "ADA07036-E1A8-4CA5-9B5D-D54427DAA467 - a64d21a82ef74a0d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ChatHub.SceneDelegate.scene(_: __C.UIScene, willConnectTo: __C.UISceneSession, options: __C.UISceneConnectionOptions) -&gt; ()"
+                  symbolName = "ChatHub.MyMessageTableViewCell.configure(model: ChatHub.ChatMessage) -&gt; ()"
                   moduleName = "ChatHub"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/SceneDelegate.swift"
+                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/Views/CellViews/MyMessageTableViewCell.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "428">
+                  startingLineNumber = "174"
+                  endingLineNumber = "174"
+                  offsetFromSymbolStart = "2296">
                </Location>
                <Location
-                  uuid = "B8BFE884-6F76-4920-85AF-452AC6EDBDA7 - 3283d0ff1a32e91f"
+                  uuid = "ADA07036-E1A8-4CA5-9B5D-D54427DAA467 - a64d21a82ef74a0d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ChatHub.SceneDelegate.scene(_: __C.UIScene, willConnectTo: __C.UISceneSession, options: __C.UISceneConnectionOptions) -&gt; ()"
+                  symbolName = "ChatHub.MyMessageTableViewCell.configure(model: ChatHub.ChatMessage) -&gt; ()"
                   moduleName = "ChatHub"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/SceneDelegate.swift"
+                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/Views/CellViews/MyMessageTableViewCell.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "472">
+                  startingLineNumber = "174"
+                  endingLineNumber = "174"
+                  offsetFromSymbolStart = "2376">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -87,144 +55,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C94A0BBD-EC99-4439-9716-FD6F38DE0924"
-            shouldBeEnabled = "No"
+            uuid = "9A7AD4DC-881D-46D2-8ABF-B5F77E118412"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ChatHub/SceneDelegate.swift"
+            filePath = "ChatHub/Views/CellViews/MyMessageTableViewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "scene(_:willConnectTo:options:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "0AA5F585-14DF-4F28-99C2-9957A5F85A87"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChatHub/Views/LoginView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "logInButton"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "0AA5F585-14DF-4F28-99C2-9957A5F85A87 - caaae5cfb93cf8ac"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; __C.UIButton in variable initialization expression of ChatHub.LoginView.logInButton : __C.UIButton"
-                  moduleName = "ChatHub"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/Views/LoginView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "72"
-                  endingLineNumber = "72"
-                  offsetFromSymbolStart = "328">
-               </Location>
-               <Location
-                  uuid = "0AA5F585-14DF-4F28-99C2-9957A5F85A87 - caaae5cfb93cf94f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; __C.UIButton in variable initialization expression of ChatHub.LoginView.logInButton : __C.UIButton"
-                  moduleName = "ChatHub"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/Views/LoginView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "73"
-                  endingLineNumber = "73"
-                  offsetFromSymbolStart = "476">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9E183616-49A5-47FC-ADE6-F670DB71F526"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChatHub/Controllers/SignupViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
-            landmarkName = "didTapSignup(name:email:pass:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "807E2F5B-6FE0-4C15-B92C-396E4C9311D9"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChatHub/NetworkLayer/FirestoreWrapper.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "getAllDocuments(orderByTimeStamp:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "03FB74E6-F62F-40D4-8A14-EEFF1F5F1784"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChatHub/Controllers/ChatViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
-            landmarkName = "registerListner()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "273513CC-019F-450B-BA1A-14EF2F299768"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChatHub/Controllers/ChatViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
-            landmarkName = "registerListner()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "AC61E04E-BF66-4549-9498-411167E906F5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChatHub/Controllers/ChatViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
-            landmarkName = "registerListner()"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
+            landmarkName = "configure(model:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

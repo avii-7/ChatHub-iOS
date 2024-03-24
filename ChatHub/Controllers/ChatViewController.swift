@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
+import PhotosUI
 
 final class ChatViewController: UIViewController {
     
@@ -131,24 +132,59 @@ final class ChatViewController: UIViewController {
 
 extension ChatViewController: ChatViewDelegate {
     
-    func didTapSend(msg: String?) -> Bool {
+    func didTapMedia() {
+        if #available(iOS 14.0, *) {
+            var configuration = PHPickerConfiguration()
+            configuration.selectionLimit = 2
+            configuration.filter = .images
+            
+            let pickerViewController = PHPickerViewController(configuration: configuration)
+            pickerViewController.delegate = self
+            present(pickerViewController, animated: true)
+            
+        } else {
+            //            let imagePickerController = UIImagePickerController()
+            //            imagePickerController.sourceType = .photoLibrary
+        }
+    }
+    
+    func didTapSend(msg: String?, images: [UIImage]?) -> Bool {
         
         guard let msg else {
             debugPrint("Textfield is empty !!")
             return false
         }
-        
-        let newMessage = ChatMessage(
+
+        var newMessage = ChatMessage(
             id: UUID().uuidString,
             userId: user.uid,
             userName: user.displayName ?? "",
             message: msg
         )
         
-        do {
-            try chatWrapper.sendMessage(message: newMessage)
-        } catch {
-            debugPrint("Error \(error)")
+        let firebaseStorage = FirebaseStorageWrapper(uid: user.uid)
+        
+        Task {
+            
+            do {
+                if let images {
+                    let result = try await firebaseStorage.uploadImages(msgId: newMessage.id, images)
+                    var urlStrings = [String]()
+                    for url in result {
+                        urlStrings.append(url.absoluteString)
+                    }
+                    
+                    newMessage.attachedImageNames = urlStrings
+                }
+                try chatWrapper.sendMessage(message: newMessage)
+                
+                DispatchQueue.main.async { [weak self] in
+                    self?.chatView.removeAllImagesFromMessage()
+                }
+                
+            } catch {
+                debugPrint("Error \(error)")
+            }
         }
         
         return true
@@ -166,7 +202,7 @@ extension ChatViewController: ChatTableViewDelegate {
         
         if chatMessage.userId == user.uid {
             if let cell = tableView.dequeueReusableCell(withIdentifier: MyMessageTableViewCell.identifier, for: indexPath) as? MyMessageTableViewCell {
-                cell.configure(message: chatMessage)
+                cell.configure(model: chatMessage)
                 return cell
             }
         }
@@ -198,5 +234,36 @@ extension ChatViewController: ChatTableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         UITableView.automaticDimension
+    }
+}
+                          
+extension ChatViewController: PHPickerViewControllerDelegate {
+    
+    @available(iOS 14.0, *)
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        
+        picker.dismiss(animated: true)
+        
+        if results.isEmpty {
+            return
+        }
+        
+        for result in results {
+            let itemProvider = result.itemProvider
+            if itemProvider.canLoadObject(ofClass: UIImage.self) == false {
+                continue
+            }
+            
+           itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image , error  in
+                if let error {
+                    print(error)
+                }
+                guard let selectedImage = image as? UIImage else { return }
+                
+                DispatchQueue.main.async {
+                    self?.chatView.attachImageToMessage(selectedImage)
+                }
+            }
+        }
     }
 }
