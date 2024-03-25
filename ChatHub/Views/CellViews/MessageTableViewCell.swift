@@ -8,11 +8,15 @@
 import UIKit
 import SDWebImage
 
-final class MyMessageTableViewCell: UITableViewCell {
+final class MessageTableViewCell: UITableViewCell {
     
-    static let identifier = String(describing: MyMessageTableViewCell.self)
+    static let identifier = String(describing: MessageTableViewCell.self)
     
     private var attachLabelTopToImageContainerViewBottom: NSLayoutConstraint?
+    
+    private var attachMessageViewToLeft: NSLayoutConstraint?
+    
+    private var attachMessageViewToRight: NSLayoutConstraint?
     
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -33,6 +37,7 @@ final class MyMessageTableViewCell: UITableViewCell {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 12
+        view.clipsToBounds = true
         return view
     }()
     
@@ -42,8 +47,6 @@ final class MyMessageTableViewCell: UITableViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        view.heightAnchor.constraint(equalToConstant: 100).isActive = true
         return view
     }()
     
@@ -53,8 +56,6 @@ final class MyMessageTableViewCell: UITableViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        view.heightAnchor.constraint(equalToConstant: 100).isActive = true
         return view
     }()
     
@@ -96,16 +97,18 @@ final class MyMessageTableViewCell: UITableViewCell {
     }
     
     private func addConstraints() {
+        
         NSLayoutConstraint.activate([
             
             messageBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
-            messageBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            messageBackgroundView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -15),
+            messageBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15),
             messageBackgroundView.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor, multiplier: 0.7),
             
             imageContainerView.topAnchor.constraint(equalTo: messageBackgroundView.topAnchor, constant: 5),
             imageContainerView.leftAnchor.constraint(equalTo: messageBackgroundView.leftAnchor, constant: 5),
             imageContainerView.rightAnchor.constraint(equalTo: messageBackgroundView.rightAnchor, constant: -5),
+            
+            //imageContainerView.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor, multiplier: 0.7),
             
             imageView1.topAnchor.constraint(equalTo: imageContainerView.topAnchor, constant: 0),
             imageView1.leftAnchor.constraint(equalTo: imageContainerView.leftAnchor, constant: 0),
@@ -114,36 +117,56 @@ final class MyMessageTableViewCell: UITableViewCell {
             imageView2.leftAnchor.constraint(equalTo: imageView1.rightAnchor, constant: 0),
             
             imageView2.topAnchor.constraint(equalTo: imageContainerView.topAnchor, constant: 0),
-            imageView2.rightAnchor.constraint(lessThanOrEqualTo: imageContainerView.rightAnchor, constant: 0),
+            imageView2.rightAnchor.constraint(equalTo: imageContainerView.rightAnchor, constant: 0),
             imageView2.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor, constant: 0),
+            
+            imageView1.widthAnchor.constraint(equalToConstant:75),
+            imageView2.widthAnchor.constraint(equalTo: imageView1.widthAnchor),
+            
+            imageView1.heightAnchor.constraint(equalTo: imageView1.widthAnchor),
+            imageView2.heightAnchor.constraint(equalTo: imageView2.heightAnchor),
             
             messageLabel.bottomAnchor.constraint(equalTo: messageBackgroundView.bottomAnchor, constant: -15),
             messageLabel.leftAnchor.constraint(equalTo: messageBackgroundView.leftAnchor, constant: 10),
             messageLabel.rightAnchor.constraint(equalTo: timeLabel.leftAnchor, constant: -5),
             
             timeLabel.rightAnchor.constraint(equalTo: messageBackgroundView.rightAnchor, constant: -5),
-            timeLabel.bottomAnchor.constraint(equalTo: messageBackgroundView.bottomAnchor, constant: -3)
+            timeLabel.bottomAnchor.constraint(equalTo: messageBackgroundView.bottomAnchor, constant: -3),
         ])
         
-        var constraint = messageLabel.topAnchor.constraint(equalTo: messageBackgroundView.topAnchor, constant: 15)
+        let constraint = messageLabel.topAnchor.constraint(equalTo: messageBackgroundView.topAnchor, constant: 15)
         constraint.priority = UILayoutPriority(500)
         constraint.isActive = true
         
         attachLabelTopToImageContainerViewBottom = messageLabel.topAnchor.constraint(equalTo: imageContainerView.bottomAnchor, constant: 15)
         attachLabelTopToImageContainerViewBottom?.priority = UILayoutPriority.defaultLow
         attachLabelTopToImageContainerViewBottom?.isActive = true
+        
+        // Constraints used for shifting cell left/right
+        attachMessageViewToLeft = messageBackgroundView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15)
+        attachMessageViewToLeft?.isActive = true
+        attachMessageViewToRight = messageBackgroundView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -15)
     }
     
-    func configure(model: ChatMessage) {
+    func configure(model: ChatMessage, _ myCell: Bool) {
+        
+        if myCell {
+            attachMessageViewToLeft?.isActive = false
+            attachMessageViewToRight?.isActive = true
+        }
+        else {
+            attachMessageViewToRight?.isActive = false
+            attachMessageViewToLeft?.isActive = true
+        }
         
         if
             let images = model.attachedImageNames,
             images.isEmpty == false {
             
-            attachLabelTopToImageContainerViewBottom?.priority = UILayoutPriority.defaultHigh
-            
             imageContainerView.isHidden = false
             imageView1.isHidden = false
+            
+            attachLabelTopToImageContainerViewBottom?.priority = UILayoutPriority.defaultHigh
             
             imageView1.sd_setImage(with: .init(string: images[0]))
             
@@ -154,11 +177,11 @@ final class MyMessageTableViewCell: UITableViewCell {
             else {
                 imageView2.isHidden = true
             }
-            
         }
         else {
             imageContainerView.isHidden = true
             attachLabelTopToImageContainerViewBottom?.priority = UILayoutPriority.defaultLow
+            
         }
         
         messageLabel.text = model.message
@@ -171,13 +194,12 @@ final class MyMessageTableViewCell: UITableViewCell {
         }
         
         if let timeStamp = model.timeStamp {
-            timeLabel.text = MyMessageTableViewCell.dateFormatter.string(from: timeStamp.dateValue())
+            timeLabel.text = MessageTableViewCell.dateFormatter.string(from: timeStamp.dateValue())
             timeLabel.isHidden = false
         }
         else {
             timeLabel.isHidden = true
         }
-        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -185,5 +207,4 @@ final class MyMessageTableViewCell: UITableViewCell {
         
         // Configure the view for the selected state
     }
-    
 }

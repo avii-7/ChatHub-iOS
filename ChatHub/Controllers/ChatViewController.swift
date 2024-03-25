@@ -22,6 +22,7 @@ final class ChatViewController: UIViewController {
     
     init(user: User) {
         self.user = user
+//        super.init(nibName: nil, bundle: nil)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -154,7 +155,7 @@ extension ChatViewController: ChatViewDelegate {
             debugPrint("Textfield is empty !!")
             return false
         }
-
+        
         var newMessage = ChatMessage(
             id: UUID().uuidString,
             userId: user.uid,
@@ -200,21 +201,10 @@ extension ChatViewController: ChatTableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let chatMessage = chatMessages[indexPath.row]
         
-        if chatMessage.userId == user.uid {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: MyMessageTableViewCell.identifier, for: indexPath) as? MyMessageTableViewCell {
-                cell.configure(model: chatMessage)
-                return cell
-            }
-        }
-        else {
-            if let cell = tableView.dequeueReusableCell(
-                withIdentifier: OtherMessageTableViewCell.identifier,
-                for: indexPath
-            ) as? OtherMessageTableViewCell {
-                
-                cell.configure(message: chatMessage)
-                return cell
-            }
+        if let cell = tableView.dequeueReusableCell(withIdentifier: MessageTableViewCell.identifier, for: indexPath) as? MessageTableViewCell {
+            let myCell = chatMessage.userId == user.uid
+            cell.configure(model: chatMessage, myCell)
+            return cell
         }
         
         return .init()
@@ -236,7 +226,7 @@ extension ChatViewController: ChatTableViewDelegate {
         UITableView.automaticDimension
     }
 }
-                          
+
 extension ChatViewController: PHPickerViewControllerDelegate {
     
     @available(iOS 14.0, *)
@@ -254,7 +244,7 @@ extension ChatViewController: PHPickerViewControllerDelegate {
                 continue
             }
             
-           itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image , error  in
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image , error  in
                 if let error {
                     print(error)
                 }

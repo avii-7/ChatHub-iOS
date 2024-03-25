@@ -134,8 +134,7 @@ final class ChatView: UIView {
     }
     
     private func setupTableView() {
-        chatTableView.register(MyMessageTableViewCell.self, forCellReuseIdentifier: MyMessageTableViewCell.identifier)
-        chatTableView.register(OtherMessageTableViewCell.self, forCellReuseIdentifier: OtherMessageTableViewCell.identifier)
+        chatTableView.register(MessageTableViewCell.self, forCellReuseIdentifier: MessageTableViewCell.identifier)
     }
     
     private func addConstraints() {
