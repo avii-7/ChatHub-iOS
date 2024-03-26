@@ -33,10 +33,13 @@ final class MessageTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let imageContainerView: UIView = {
-        let view = UIView()
+    private let imageContainerView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .horizontal
+        view.alignment = .center
+        view.distribution = .equalSpacing
+        view.spacing = 5
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 12
         view.clipsToBounds = true
         return view
     }()
@@ -44,8 +47,8 @@ final class MessageTableViewCell: UITableViewCell {
     private let imageView1: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(systemName: "photo")
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.contentMode = .scaleAspectFill
+        view.layer.cornerRadius = 7
         view.clipsToBounds = true
         return view
     }()
@@ -53,7 +56,7 @@ final class MessageTableViewCell: UITableViewCell {
     private let imageView2: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(systemName: "photo")
-        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 7
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         return view
@@ -88,8 +91,8 @@ final class MessageTableViewCell: UITableViewCell {
     }
     
     private func setupView() {
-        imageContainerView.addSubview(imageView1)
-        imageContainerView.addSubview(imageView2)
+        imageContainerView.addArrangedSubview(imageView1)
+        imageContainerView.addArrangedSubview(imageView2)
         messageBackgroundView.addSubview(imageContainerView)
         messageBackgroundView.addSubview(messageLabel)
         messageBackgroundView.addSubview(timeLabel)
@@ -106,25 +109,32 @@ final class MessageTableViewCell: UITableViewCell {
             
             imageContainerView.topAnchor.constraint(equalTo: messageBackgroundView.topAnchor, constant: 5),
             imageContainerView.leftAnchor.constraint(equalTo: messageBackgroundView.leftAnchor, constant: 5),
-            imageContainerView.rightAnchor.constraint(equalTo: messageBackgroundView.rightAnchor, constant: -5),
+            imageContainerView.rightAnchor.constraint(lessThanOrEqualTo: messageBackgroundView.rightAnchor, constant: -5),
             
-            //imageContainerView.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor, multiplier: 0.7),
-            
-            imageView1.topAnchor.constraint(equalTo: imageContainerView.topAnchor, constant: 0),
-            imageView1.leftAnchor.constraint(equalTo: imageContainerView.leftAnchor, constant: 0),
-            imageView1.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor, constant: 0),
-            
-            imageView2.leftAnchor.constraint(equalTo: imageView1.rightAnchor, constant: 0),
-            
-            imageView2.topAnchor.constraint(equalTo: imageContainerView.topAnchor, constant: 0),
-            imageView2.rightAnchor.constraint(equalTo: imageContainerView.rightAnchor, constant: 0),
-            imageView2.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor, constant: 0),
-            
-            imageView1.widthAnchor.constraint(equalToConstant:75),
+            imageView1.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.6 * 0.5),
             imageView2.widthAnchor.constraint(equalTo: imageView1.widthAnchor),
             
             imageView1.heightAnchor.constraint(equalTo: imageView1.widthAnchor),
-            imageView2.heightAnchor.constraint(equalTo: imageView2.heightAnchor),
+            imageView2.heightAnchor.constraint(equalTo: imageView2.widthAnchor),
+            
+            
+            //imageContainerView.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor, multiplier: 0.7),
+            
+//            imageView1.topAnchor.constraint(equalTo: imageContainerView.topAnchor, constant: 0),
+//            imageView1.leftAnchor.constraint(equalTo: imageContainerView.leftAnchor, constant: 0),
+//            imageView1.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor, constant: 0),
+//            
+//            imageView2.leftAnchor.constraint(equalTo: imageView1.rightAnchor, constant: 0),
+//            
+//            imageView2.topAnchor.constraint(equalTo: imageContainerView.topAnchor, constant: 0),
+//            imageView2.rightAnchor.constraint(equalTo: imageContainerView.rightAnchor, constant: 0),
+//            imageView2.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor, constant: 0),
+//            
+//            imageView1.widthAnchor.constraint(equalToConstant:75),
+//            imageView2.widthAnchor.constraint(equalTo: imageView1.widthAnchor),
+//            
+//            imageView1.heightAnchor.constraint(equalTo: imageView1.widthAnchor),
+//            imageView2.heightAnchor.constraint(equalTo: imageView2.heightAnchor),
             
             messageLabel.bottomAnchor.constraint(equalTo: messageBackgroundView.bottomAnchor, constant: -15),
             messageLabel.leftAnchor.constraint(equalTo: messageBackgroundView.leftAnchor, constant: 10),
@@ -179,9 +189,10 @@ final class MessageTableViewCell: UITableViewCell {
             }
         }
         else {
+            imageView1.isHidden = true
+            imageView2.isHidden = true
             imageContainerView.isHidden = true
             attachLabelTopToImageContainerViewBottom?.priority = UILayoutPriority.defaultLow
-            
         }
         
         messageLabel.text = model.message
