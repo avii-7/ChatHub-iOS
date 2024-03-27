@@ -55,16 +55,142 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "373CB3E4-939F-4798-89A0-BB37B12E9928"
+            uuid = "32265E50-81EB-4C83-8ACF-1A934952E87A"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChatHub/Controllers/ChatViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "206"
-            endingLineNumber = "206"
-            landmarkName = "tableView(_:cellForRowAt:)"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "registerListner()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "32265E50-81EB-4C83-8ACF-1A934952E87A - b638f08022a7abcd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor (Swift.Array&lt;__C.FIRDocumentChange&gt;) -&gt; () in ChatHub.ChatViewController.registerListner() -&gt; ()"
+                  moduleName = "ChatHub"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/Controllers/ChatViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "316">
+               </Location>
+               <Location
+                  uuid = "32265E50-81EB-4C83-8ACF-1A934952E87A - 25c5dbd622b8def7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.FIRDocumentChange) throws -&gt; () in closure #1 @Swift.MainActor (Swift.Array&lt;__C.FIRDocumentChange&gt;) -&gt; () in ChatHub.ChatViewController.registerListner() -&gt; ()"
+                  moduleName = "ChatHub"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/Controllers/ChatViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "116">
+               </Location>
+               <Location
+                  uuid = "32265E50-81EB-4C83-8ACF-1A934952E87A - 7e044fc7d38661d2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor (Swift.Array&lt;__C.FIRQueryDocumentSnapshot&gt;) -&gt; () in ChatHub.ChatViewController.registerListner() -&gt; ()"
+                  moduleName = "ChatHub"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/Controllers/ChatViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "316">
+               </Location>
+               <Location
+                  uuid = "32265E50-81EB-4C83-8ACF-1A934952E87A - da78354ddf46804a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.FIRQueryDocumentSnapshot) throws -&gt; () in closure #1 @Swift.MainActor (Swift.Array&lt;__C.FIRQueryDocumentSnapshot&gt;) -&gt; () in ChatHub.ChatViewController.registerListner() -&gt; ()"
+                  moduleName = "ChatHub"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/Controllers/ChatViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "92">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3420A3D1-A201-44B4-B61C-92995FBDEF52"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChatHub/Controllers/ChatViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
+            landmarkName = "registerListner()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3420A3D1-A201-44B4-B61C-92995FBDEF52 - b638f08022a7aac5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor (Swift.Array&lt;__C.FIRDocumentChange&gt;) -&gt; () in ChatHub.ChatViewController.registerListner() -&gt; ()"
+                  moduleName = "ChatHub"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/Controllers/ChatViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "101"
+                  endingLineNumber = "101"
+                  offsetFromSymbolStart = "488">
+               </Location>
+               <Location
+                  uuid = "3420A3D1-A201-44B4-B61C-92995FBDEF52 - 7e044fc7d38660fb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor (Swift.Array&lt;__C.FIRQueryDocumentSnapshot&gt;) -&gt; () in ChatHub.ChatViewController.registerListner() -&gt; ()"
+                  moduleName = "ChatHub"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/avii/Desktop/My%20Projects/ChatHub/ChatHub/Controllers/ChatViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "100"
+                  endingLineNumber = "100"
+                  offsetFromSymbolStart = "488">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "480160EA-C07D-47F1-A9E2-AFECFA0C9502"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChatHub/NetworkLayer/FirestoreWrapper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "registerLister(onChange:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

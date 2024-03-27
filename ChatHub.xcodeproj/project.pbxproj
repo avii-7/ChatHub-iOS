@@ -11,6 +11,7 @@
 		860234C62B9338BE00BAA7A0 /* FirebaseStorageWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860234C52B9338BE00BAA7A0 /* FirebaseStorageWrapper.swift */; };
 		8620C79F2B89D33200C95EC8 /* FirestoreWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8620C79E2B89D33200C95EC8 /* FirestoreWrapper.swift */; };
 		8620C7A22B89DA8700C95EC8 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8620C7A12B89DA8700C95EC8 /* LoginView.swift */; };
+		862973632BB34C2F005E8FF8 /* ChatMessageTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862973622BB34C2F005E8FF8 /* ChatMessageTableHeaderView.swift */; };
 		863510EB2B8B3695007931A7 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863510EA2B8B3695007931A7 /* ChatView.swift */; };
 		863510ED2B8BA20E007931A7 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863510EC2B8BA20E007931A7 /* SignupViewController.swift */; };
 		863510EF2B8BAFAE007931A7 /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863510EE2B8BAFAE007931A7 /* SignupView.swift */; };
@@ -55,6 +56,7 @@
 		860234C52B9338BE00BAA7A0 /* FirebaseStorageWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageWrapper.swift; sourceTree = "<group>"; };
 		8620C79E2B89D33200C95EC8 /* FirestoreWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWrapper.swift; sourceTree = "<group>"; };
 		8620C7A12B89DA8700C95EC8 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		862973622BB34C2F005E8FF8 /* ChatMessageTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageTableHeaderView.swift; sourceTree = "<group>"; };
 		863510EA2B8B3695007931A7 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		863510EC2B8BA20E007931A7 /* SignupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		863510EE2B8BAFAE007931A7 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
@@ -123,6 +125,14 @@
 				86C082AA2B8520D0004F98C0 /* MessageTableViewCell.swift */,
 			);
 			path = CellViews;
+			sourceTree = "<group>";
+		};
+		862973612BB34A3A005E8FF8 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				862973622BB34C2F005E8FF8 /* ChatMessageTableHeaderView.swift */,
+			);
+			path = Headers;
 			sourceTree = "<group>";
 		};
 		86485A362B83D1BA00E4C567 = {
@@ -226,6 +236,7 @@
 		86C082A92B852091004F98C0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				862973612BB34A3A005E8FF8 /* Headers */,
 				8620C7A02B89DA5400C95EC8 /* CellViews */,
 				8620C7A12B89DA8700C95EC8 /* LoginView.swift */,
 				863510EA2B8B3695007931A7 /* ChatView.swift */,
@@ -387,6 +398,7 @@
 				86C082AB2B8520D0004F98C0 /* MessageTableViewCell.swift in Sources */,
 				86C0829C2B84FF5D004F98C0 /* ChatViewController.swift in Sources */,
 				863510ED2B8BA20E007931A7 /* SignupViewController.swift in Sources */,
+				862973632BB34C2F005E8FF8 /* ChatMessageTableHeaderView.swift in Sources */,
 				8620C7A22B89DA8700C95EC8 /* LoginView.swift in Sources */,
 				86485A452B83D1BA00E4C567 /* SceneDelegate.swift in Sources */,
 				8620C79F2B89D33200C95EC8 /* FirestoreWrapper.swift in Sources */,

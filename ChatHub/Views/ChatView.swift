@@ -39,7 +39,7 @@ final class ChatView: UIView {
         view.axis = .horizontal
         view.spacing = 5
         view.distribution = .equalCentering
-        //view.isHidden = true
+        
         return view
     }()
     
@@ -114,7 +114,7 @@ final class ChatView: UIView {
     
     private func setUpViews() {
         addSubview(chatTableView)
-        addSubview(messageView)
+                        addSubview(messageView)
         //addSubview(messageSendButton)
         
         setupMessageView()
@@ -134,7 +134,9 @@ final class ChatView: UIView {
     }
     
     private func setupTableView() {
+        // need to remove from here.
         chatTableView.register(MessageTableViewCell.self, forCellReuseIdentifier: MessageTableViewCell.identifier)
+        chatTableView.register(ChatMessageTableHeaderView.self, forHeaderFooterViewReuseIdentifier: ChatMessageTableHeaderView.identifier)
     }
     
     private func addConstraints() {

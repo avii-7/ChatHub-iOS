@@ -83,6 +83,7 @@ final class ChatViewController: UIViewController {
         
     }
     
+    // Todo: get all messages initially
     private func registerListner() {
         chatWrapper.registerLister { @MainActor [weak self] docsSnapshot in
             
@@ -224,6 +225,15 @@ extension ChatViewController: ChatTableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: ChatMessageTableHeaderView.identifier) as? ChatMessageTableHeaderView {
+            
+            return cell
+        }
+        
+        return .init()
     }
 }
 

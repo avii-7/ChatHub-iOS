@@ -22,6 +22,13 @@ class FirestoreWrapper {
     func registerLister(onChange: @escaping (([DocumentChange]) -> Void)) {
 
         listener = collectionRef.addSnapshotListener(includeMetadataChanges: false) { querySnapshot, error in
+            
+            if
+                let value = querySnapshot?.metadata.isFromCache,
+                value {
+                return
+            }
+            
             if let changedDocs = querySnapshot?.documentChanges {
                 onChange(changedDocs)
             }
