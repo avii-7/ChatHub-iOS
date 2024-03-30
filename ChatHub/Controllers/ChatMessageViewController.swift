@@ -10,19 +10,18 @@ import FirebaseAuth
 import FirebaseFirestore
 import PhotosUI
 
-final class ChatViewController: UIViewController {
+final class ChatMessageViewController: UIViewController {
     
     private var chatMessages = [ChatMessage]()
     
     private let chatWrapper = ChatWrapper()
     
-    private let chatView = ChatView()
+    private let chatMessageView = ChatMessageView()
     
     let user: User
     
     init(user: User) {
         self.user = user
-//        super.init(nibName: nil, bundle: nil)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -33,6 +32,7 @@ final class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        InitData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,20 +46,20 @@ final class ChatViewController: UIViewController {
     }
     
     private func setupView() {
-        view.addSubview(chatView)
+        view.addSubview(chatMessageView)
         view.backgroundColor = .systemBackground
-        chatView.translatesAutoresizingMaskIntoConstraints = false
-        chatView.delegate = self
-        chatView.tableViewDelegate = self
+        chatMessageView.translatesAutoresizingMaskIntoConstraints = false
+        chatMessageView.delegate = self
+        chatMessageView.tableViewDelegate = self
         addConstraints()
         setLogoutButton()
         
         func addConstraints() {
             NSLayoutConstraint.activate([
-                chatView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                chatView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-                chatView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-                chatView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                chatMessageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                chatMessageView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+                chatMessageView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+                chatMessageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             ])
         }
         
@@ -113,11 +113,11 @@ final class ChatViewController: UIViewController {
                         indexPaths.append(.init(row: i, section: 0))
                     }
                     
-                    let isAtBottom = chatView.isAtBottom
-                    self.chatView.insertRows(at: indexPaths)
+                    let isAtBottom = chatMessageView.isAtBottom
+                    self.chatMessageView.insertRows(at: indexPaths)
                     
                     if isAtBottom {
-                        chatView.scrollToRow(to: .init(row: endIndex, section: 0))
+                        chatMessageView.scrollToRow(to: .init(row: endIndex, section: 0))
                     }
                 }
             }
@@ -130,9 +130,29 @@ final class ChatViewController: UIViewController {
     private func unregiseterLister(){
         chatWrapper.unregisterListener()
     }
+    
+    private func InitData() {
+        Task { @MainActor in
+            do {
+                let tempChatMessages = try await chatWrapper.getMessages()
+                chatMessages.append(contentsOf: tempChatMessages)
+                chatMessageView.reloadTableView()
+                DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.microseconds(1), execute: { [weak self] in
+                    
+                    if let self {
+                        self.chatMessageView.scrollToRow(to: IndexPath(row: self.chatMessages.count - 1, section: 0))
+                    }
+                })
+            }
+            catch {
+                debugPrint("Error \(error)")
+            }
+        }
+        
+    }
 }
 
-extension ChatViewController: ChatViewDelegate {
+extension ChatMessageViewController: ChatViewDelegate {
     
     func didTapMedia() {
         if #available(iOS 14.0, *) {
@@ -181,7 +201,7 @@ extension ChatViewController: ChatViewDelegate {
                 try chatWrapper.sendMessage(message: newMessage)
                 
                 DispatchQueue.main.async { [weak self] in
-                    self?.chatView.removeAllImagesFromMessage()
+                    self?.chatMessageView.removeAllImagesFromMessage()
                 }
                 
             } catch {
@@ -193,7 +213,7 @@ extension ChatViewController: ChatViewDelegate {
     }
 }
 
-extension ChatViewController: ChatTableViewDelegate {
+extension ChatMessageViewController: ChatTableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         chatMessages.count
@@ -237,7 +257,7 @@ extension ChatViewController: ChatTableViewDelegate {
     }
 }
 
-extension ChatViewController: PHPickerViewControllerDelegate {
+extension ChatMessageViewController: PHPickerViewControllerDelegate {
     
     @available(iOS 14.0, *)
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
@@ -261,7 +281,7 @@ extension ChatViewController: PHPickerViewControllerDelegate {
                 guard let selectedImage = image as? UIImage else { return }
                 
                 DispatchQueue.main.async {
-                    self?.chatView.attachImageToMessage(selectedImage)
+                    self?.chatMessageView.attachImageToMessage(selectedImage)
                 }
             }
         }

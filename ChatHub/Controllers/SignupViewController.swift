@@ -90,7 +90,7 @@ extension SignupViewController: SignupViewDelegate {
         
         try await profileChangeRequest.commitChanges()
         
-        navigationController?.setViewControllers([ChatViewController(user: user)], animated: true)
+        navigationController?.setViewControllers([ChatMessageViewController(user: user)], animated: true)
     }
     
     private func showAlert(msg: String) {

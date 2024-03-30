@@ -30,7 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let user {
             // First launch of app
             if hasLaunchedBefore {
-                navigationController = UINavigationController(rootViewController: ChatViewController(user: user))
+                navigationController = UINavigationController(rootViewController: ChatMessageViewController(user: user))
             }
             else {
                 do {

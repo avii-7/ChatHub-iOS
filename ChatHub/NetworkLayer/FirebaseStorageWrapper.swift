@@ -60,7 +60,7 @@ final class FirebaseStorageWrapper {
                 if let data = image.jpegData(compressionQuality: 0.6) {
                     group.addTask { [weak self] in
                         guard let self else { return nil}
-                        let response = try await uploadData(at: imageRef, data: data, metadata: imageMetadata)
+                        let _ = try await uploadData(at: imageRef, data: data, metadata: imageMetadata)
                         let url = try await imageRef.downloadURL()
                         return url
                     }

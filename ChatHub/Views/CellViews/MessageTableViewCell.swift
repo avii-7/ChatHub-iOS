@@ -91,6 +91,7 @@ final class MessageTableViewCell: UITableViewCell {
     }
     
     private func setupView() {
+        selectionStyle = .none
         imageContainerView.addArrangedSubview(imageView1)
         imageContainerView.addArrangedSubview(imageView2)
         messageBackgroundView.addSubview(imageContainerView)
@@ -215,7 +216,5 @@ final class MessageTableViewCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
     }
 }

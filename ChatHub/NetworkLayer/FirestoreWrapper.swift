@@ -24,8 +24,8 @@ class FirestoreWrapper {
         listener = collectionRef.addSnapshotListener(includeMetadataChanges: false) { querySnapshot, error in
             
             if
-                let value = querySnapshot?.metadata.isFromCache,
-                value {
+                let querySnapshot,
+                querySnapshot.metadata.isFromCache {
                 return
             }
             

@@ -14,7 +14,7 @@ protocol ChatViewDelegate: AnyObject {
 
 protocol ChatTableViewDelegate: UITableViewDataSource, UITableViewDelegate { }
 
-final class ChatView: UIView {
+final class ChatMessageView: UIView {
     
     private var attachedImages = [UIImage]()
     
@@ -114,7 +114,7 @@ final class ChatView: UIView {
     
     private func setUpViews() {
         addSubview(chatTableView)
-                        addSubview(messageView)
+        addSubview(messageView)
         //addSubview(messageSendButton)
         
         setupMessageView()
@@ -212,7 +212,7 @@ final class ChatView: UIView {
     }
     
     func scrollToRow(to indexPath: IndexPath) {
-        chatTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        chatTableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
     }
     
     func attachImageToMessage(_ image: UIImage) {

@@ -59,7 +59,7 @@ extension LoginViewController: LoginViewDelegate {
         let authResult = try await Auth.auth().signIn(withEmail: email, password: pass)
         let user = authResult.user
         
-        navigationController?.setViewControllers([ChatViewController(user: user)], animated: true)
+        navigationController?.setViewControllers([ChatMessageViewController(user: user)], animated: true)
     }
     
     func didTapSignup() {
